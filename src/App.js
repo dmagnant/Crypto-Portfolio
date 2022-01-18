@@ -30,7 +30,7 @@ function numberWithCommas(num) {
 class Coin extends React.Component {
   render() {
     const profile = this.props;
-    const price = profile.market_data.current_price.usd;
+    const price = profile.market_data.current_price.usd.toFixed(2);
     let coin_holdings = 0;
     let worth = 0;
     try {
@@ -82,10 +82,21 @@ class AddCoin extends React.Component {
   	event.preventDefault();
     await fetch(`https://api.coingecko.com/api/v3/coins/${this.state.coin.toLocaleLowerCase()}`)
       .then((response) => {
-        return response.json();
+        if (response.status === 404) {
+          const err = new Error ("please enter a valid coin name (ex. bitcoin)");
+          throw err;
+        }
+        else {
+          return response.json();
+        }
       })
-    .then((data) => {
-      this.props.onSubmit(data);
+      .catch((error) => {
+        alert(error);
+        this.setState({ coin: '' });
+      })
+      .then((data) => {
+        console.log('data: ', data.error)
+        this.props.onSubmit(data);
     });
     this.setState({ coin: '' });
   };
@@ -105,21 +116,26 @@ class AddCoin extends React.Component {
   }
 }
 
+
+
 class PortfolioWorth extends React.Component {
-  render() {
-    try {
-      const profile = this.props.profiles[this.props.profiles.length-1];
-      console.log('profile: ', profile);
-      const coin_holdings = holdingsData.find(isCoin, profile.name).holdings;
-      console.log('coin_holdings: ', coin_holdings);
-      const worth = (profile.market_data.current_price.usd * coin_holdings).toFixed(2);
-      console.log('worth: ', worth);
+    render() {
+    function totalPortfolio(profile) {
+        const haveCoins = holdingsData.find(isCoin, profile.name);
+        if (haveCoins !== undefined) {
+          const coin_holdings = holdingsData.find(isCoin, profile.name).holdings;
+          console.log('coin_holdings: ', coin_holdings);
+          worth += Number((profile.market_data.current_price.usd * coin_holdings).toFixed(2));
+          console.log('worth: ', worth);
+        }
     }
-    catch (err) {
-      // no coins loaded yet
+    const profile = this.props.profiles[this.props.profiles.length-1];
+    let worth = 0;
+    if (profile) {
+      this.props.profiles.forEach(totalPortfolio, worth);
     }
     return (
-      <div> portfolio worth: {this.worth} </div>
+      <div> portfolio worth: ${numberWithCommas(worth)} </div>
     );
   }
 }
@@ -128,7 +144,6 @@ class App extends React.Component {
   state = {
     profiles: [],
     holdings: holdingsData,
-    portfolioWorth: 300,
   };
   addNewProfile = (profileData) => {
   	this.setState(prevState => ({
@@ -136,17 +151,13 @@ class App extends React.Component {
     }));
     // console.log(this.state.profiles);
   };
-  updatePortfolioWorth = (coin_worth) => {
-  	this.setState(prevState => ({
-    	portfolioWorth: prevState + coin_worth,
-    }));  };
 	render() {
   	return (
     	<div>
     	  <div className="header">{this.props.title}</div>
         <AddCoin onSubmit={this.addNewProfile} />
         <CoinList profiles={this.state.profiles}/>
-        <PortfolioWorth onChange={this.updatePortfolioWorth} profiles={this.state.profiles} pworth={this.setState.PortfolioWorth} />
+        <PortfolioWorth profiles={this.state.profiles}/>
     	</div>
     );
   }	
