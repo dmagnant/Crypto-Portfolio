@@ -92,7 +92,9 @@ class AddCoin extends React.Component {
         this.setState({ coin: '' });
       })
       .then((data) => {
-        this.props.onSubmit(data);
+        if (data !== undefined) {
+          this.props.onSubmit(data);
+      }
     });
     this.setState({ coin: '' });
   };
