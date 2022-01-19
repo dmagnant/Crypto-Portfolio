@@ -1,12 +1,7 @@
 import './App.css';
 import {numberWithCommas} from './utils/validation'
+import holdingsData from './mock/holdingsData'
 import React from 'react';
-
-const holdingsData = [
-  {name: "bitcoin", holdings: 0.1},
-  {name: "cardano", holdings: 100.00},
-  {name: "ethereum", holdings: 1.00},
-];
 
 class CoinList extends React.Component {
   render() {
@@ -25,11 +20,13 @@ function isCoin(coin) {
 class Coin extends React.Component {
   render() {
     const profile = this.props;
+    const {symbol} = profile;
+    const {name} = profile;
     const price = profile.market_data.current_price.usd.toFixed(2);
     let coinHoldings = 0;
     let worth = 0;
     try {
-      coinHoldings = holdingsData.find(isCoin, profile.name).holdings;
+      coinHoldings = holdingsData.find(isCoin, name).holdings;
       worth = (price * coinHoldings).toFixed(2);
     }
     catch (err) {
@@ -39,11 +36,11 @@ class Coin extends React.Component {
       <div className="coin-profile">
         <img src={profile.image.small} alt="coin" />
         <div className="info">
-          <div className="name"> {profile.name}</div>
+          <div className="name"> {name}</div>
           <div className="price"> current price: ${numberWithCommas(price)}</div>
           <div className="holdings"> 
-          <UpdateHoldings symbol={profile.symbol}/>
-          <div>holdings: {coinHoldings} {profile.symbol}</div>
+          <UpdateHoldings symbol={symbol}/>
+          <div>holdings: {coinHoldings} {symbol}</div>
           </div>
           <div className="worth"> worth: ${numberWithCommas(worth)}</div>
         </div>
@@ -118,9 +115,10 @@ class PortfolioWorth extends React.Component {
   };
     render() {
     function totalPortfolio(profile) {
-        const haveCoins = holdingsData.find(isCoin, profile.name);
+      const {name} = profile;
+        const haveCoins = holdingsData.find(isCoin, name);
         if (haveCoins !== undefined) {
-          const coinHoldings = holdingsData.find(isCoin, profile.name).holdings;
+          const coinHoldings = holdingsData.find(isCoin, name).holdings;
           const coinWorth = Number(profile.market_data.current_price.usd * Number(coinHoldings));
           worth += Number(coinWorth);
         }
