@@ -1,4 +1,5 @@
 import './App.css';
+import {numberWithCommas} from './utils/validation'
 import React from 'react';
 
 const holdingsData = [
@@ -19,10 +20,6 @@ class CoinList extends React.Component {
 
 function isCoin(coin) {
   return coin.name.toLowerCase() === this.toLowerCase();
-}
-
-function numberWithCommas(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 class Coin extends React.Component {
