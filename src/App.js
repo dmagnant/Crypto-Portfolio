@@ -26,11 +26,11 @@ class Coin extends React.Component {
   render() {
     const profile = this.props;
     const price = profile.market_data.current_price.usd.toFixed(2);
-    let coin_holdings = 0;
+    let coinHoldings = 0;
     let worth = 0;
     try {
-      coin_holdings = holdingsData.find(isCoin, profile.name).holdings;
-      worth = (price * coin_holdings).toFixed(2);
+      coinHoldings = holdingsData.find(isCoin, profile.name).holdings;
+      worth = (price * coinHoldings).toFixed(2);
     }
     catch (err) {
       // no coins held
@@ -43,7 +43,7 @@ class Coin extends React.Component {
           <div className="price"> current price: ${numberWithCommas(price)}</div>
           <div className="holdings"> 
           <UpdateHoldings symbol={profile.symbol}/>
-          <div>holdings: {coin_holdings} {profile.symbol}</div>
+          <div>holdings: {coinHoldings} {profile.symbol}</div>
           </div>
           <div className="worth"> worth: ${numberWithCommas(worth)}</div>
         </div>
@@ -120,9 +120,9 @@ class PortfolioWorth extends React.Component {
     function totalPortfolio(profile) {
         const haveCoins = holdingsData.find(isCoin, profile.name);
         if (haveCoins !== undefined) {
-          const coin_holdings = holdingsData.find(isCoin, profile.name).holdings;
-          const coin_worth = Number(profile.market_data.current_price.usd * Number(coin_holdings));
-          worth += Number(coin_worth);
+          const coinHoldings = holdingsData.find(isCoin, profile.name).holdings;
+          const coinWorth = Number(profile.market_data.current_price.usd * Number(coinHoldings));
+          worth += Number(coinWorth);
         }
     }
     const profile = this.props.profiles;
@@ -152,15 +152,17 @@ class App extends React.Component {
     }));
   };
   refreshPortfolio = () => {
-    // this.state.profiles.forEach((profile) => console.log(profile));
-    let updateProfile = [...this.state.profiles]
-    console.log(updateProfile[0].market_data.current_price.usd)
-    updateProfile[0].market_data.current_price.usd = 999;
-    console.log(updateProfile[0].market_data.current_price.usd)
-    this.setState({
-      profiles: [...updateProfile],
-    })
-    console.log('from state: ', this.state.profiles[0].market_data.current_price.usd)
+    if (this.state.profiles) {
+      this.state.profiles.forEach((profile) => console.log(profile.name));
+      let updateProfile = [...this.state.profiles]
+      console.log(updateProfile[0].market_data.current_price.usd)
+      updateProfile[0].market_data.current_price.usd = 999;
+      console.log(updateProfile[0].market_data.current_price.usd)
+      this.setState({
+        profiles: [...updateProfile],
+      })
+      console.log('from state: ', this.state.profiles[0].market_data.current_price.usd)
+  }
   };
 	render() {
   	return (
