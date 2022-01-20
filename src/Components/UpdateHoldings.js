@@ -18,4 +18,4 @@ class UpdateHoldings extends React.Component {
   }
 }
 
-export default UpdateHoldings
+export default UpdateHoldings;

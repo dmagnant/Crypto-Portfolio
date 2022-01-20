@@ -3,6 +3,7 @@ import holdingsData from './mock/holdingsData'
 import PortfolioWorth from './components/PortfolioWorth'
 import CoinList from './components/CoinList'
 import AddCoin from './components/AddCoin'
+// import store from './stores/configureStore'
 
 import React from 'react';
 

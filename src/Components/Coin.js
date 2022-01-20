@@ -6,8 +6,7 @@ import React from 'react';
 class Coin extends React.Component {
       render() {
         const profile = this.props;
-        const {symbol} = profile;
-        const {name} = profile;
+        const {symbol, name} = profile;
         const price = profile.market_data.current_price.usd.toFixed(2);
         let coinHoldings = 0;
         let worth = 0;
@@ -39,4 +38,4 @@ class Coin extends React.Component {
       }
     }
 
-export default Coin
+export default Coin;

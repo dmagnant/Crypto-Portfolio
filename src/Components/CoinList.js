@@ -12,4 +12,4 @@ class CoinList extends React.Component {
     }
   }
 
-export default CoinList
+export default CoinList;

@@ -37,4 +37,4 @@ class PortfolioWorth extends React.Component {
     }
   }
 
-  export default PortfolioWorth
+  export default PortfolioWorth;

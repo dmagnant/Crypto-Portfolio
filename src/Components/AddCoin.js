@@ -41,4 +41,4 @@ class AddCoin extends React.Component {
   }
 }
 
-export default AddCoin
+export default AddCoin;
