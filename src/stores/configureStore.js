@@ -1,21 +1,25 @@
-// import { createStore } from 'redux'
+import { createStore } from 'redux'
 
-// const defaultState = {
-//     coins: [],
-//     portFolioWorth: 0,
-// };
+const defaultState = {
+    profiles: [],
+    portfolioWorth: 0.00,
+};
 
-// function changeState(state = defaultState, action) {
-//     if (action.type === 'ADD_COIN') {
-//         return {
-//             ...state,
-//             coins: state.coins.push(action.data)
-//         }
-//     }
+function changeState(state = defaultState, action) {
+    if (action.type === 'ADD_COIN') {
+        return {
+            ...state,
+            profiles: [...state.profiles, action.data.profiles]
+        }
+    }
+    else if (action.type === 'UPDATE_PORTFOLIO_WORTH') {
+        return {
+            ...state,
+            portfolioWorth: action.data.portfolioWorth
+        }
+    }
+    return state;
+}
+let store = createStore(changeState);
 
-//     return state;
-// }
-
-// let store = createStore(changeState);
-
-// export default store;
+export default store;

@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import {numberWithCommas} from '../utils/validation'
 import holdingsData from '../mock/holdingsData'
+import store from '../stores/configureStore'
 
 class PortfolioWorth extends React.Component {
     handleClick = (event) => {
@@ -9,10 +11,8 @@ class PortfolioWorth extends React.Component {
     };
       render() {
       function totalPortfolio(profile) {
-          console.log('profile data: ', profile);
           const haveCoins = holdingsData.find( (coin) => {
             const {name} = coin;
-            console.log('tfdsfdasfefaw143: ', this);
             return name.toLowerCase() === profile.name.toLowerCase()
         }, profile.name);
           if (haveCoins !== undefined) {
@@ -21,15 +21,15 @@ class PortfolioWorth extends React.Component {
             worth += Number(coin_worth);
           }
       }
-      const profile = this.props.profiles;
+      const profiles = store.getState().profiles;
       let worth = 0.00;
-      if (profile) {
-        this.props.profiles.forEach(totalPortfolio, worth);
-        worth = worth.toFixed(2);
+      if (profiles) {
+        profiles.forEach(totalPortfolio, worth);
+        store.dispatch( {type:'UPDATE_PORTFOLIO_WORTH', data:{portfolioWorth: worth}} );
       }
       return (
         <div>
-        <div> portfolio worth: ${numberWithCommas(worth)} 
+        <div> portfolio worth: ${numberWithCommas(store.getState().portfolioWorth.toFixed(2))} 
         </div>
         <button onClick={this.handleClick}>Refresh Portfolio </button>
         </div>
@@ -37,4 +37,4 @@ class PortfolioWorth extends React.Component {
     }
   }
 
-  export default PortfolioWorth;
+export default PortfolioWorth;

@@ -1,7 +1,8 @@
+import React from 'react';
+
 import holdingsData from '../mock/holdingsData'
 import UpdateHoldings from './UpdateHoldings'
 import {numberWithCommas} from '../utils/validation'
-import React from 'react';
 
 class Coin extends React.Component {
       render() {
@@ -13,7 +14,6 @@ class Coin extends React.Component {
         try {
           coinHoldings = holdingsData.find((coin) => {
             const {name} = coin;
-            console.log('tfdsfdasfefaw143: ', this);
             return name.toLowerCase() === profile.name.toLowerCase()
         }, name).holdings;
           worth = (price * coinHoldings).toFixed(2);

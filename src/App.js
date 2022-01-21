@@ -1,33 +1,29 @@
+import React from 'react';
+import { connect } from 'react-redux';
+
 import './App.css';
-import holdingsData from './mock/holdingsData'
 import PortfolioWorth from './components/PortfolioWorth'
 import CoinList from './components/CoinList'
 import AddCoin from './components/AddCoin'
-// import store from './stores/configureStore'
-
-import React from 'react';
+import store from './stores/configureStore'
 
 class App extends React.Component {
-  state = {
-    profiles: [],
-    holdings: holdingsData,
-  };
   addNewProfile = (profileData) => {
-  	this.setState(prevState => ({
-    	profiles: [...prevState.profiles, profileData],
-    }));
+    console.log(profileData);
+    store.dispatch( {type:'ADD_COIN', data:{profiles: profileData}} );
   };
   refreshPortfolio = () => {
-    if (this.state.profiles) {
-      this.state.profiles.forEach((profile) => console.log(profile.name));
-      let updateProfile = [...this.state.profiles]
-      console.log(updateProfile[0].market_data.current_price.usd)
-      updateProfile[0].market_data.current_price.usd = 999;
-      console.log(updateProfile[0].market_data.current_price.usd)
-      this.setState({
-        profiles: [...updateProfile],
+    if (store.getState().profiles) {
+      let profile = store.getState().profiles
+      let updateProfiles = [...profile]
+      console.log('update: ', updateProfiles);
+      updateProfiles.forEach( (coin) => {
+        console.log('foreachname: ', coin.name);
       })
-      console.log('from state: ', this.state.profiles[0].market_data.current_price.usd)
+      console.log('from state: ', store.getState().profiles[0].market_data.current_price.usd)
+      updateProfiles[0].market_data.current_price.usd = 999;
+      console.log(updateProfiles[0].market_data.current_price.usd)
+      console.log('from state: ', store.getState().profiles[0].market_data.current_price.usd)
   }
   };
 	render() {
@@ -35,11 +31,17 @@ class App extends React.Component {
     	<div>
     	  <div className="header">{this.props.title}</div>
         <AddCoin onSubmit={this.addNewProfile} />
-        <CoinList profiles={this.state.profiles}/>
-        <PortfolioWorth onClick={this.refreshPortfolio} profiles={this.state.profiles}/>
+        <CoinList />
+        <PortfolioWorth onClick={this.refreshPortfolio} />
     	</div>
     );
   }	
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    profiles: state.profiles,
+  }
+}
+
+export default connect(mapStateToProps) (App);
