@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux'
 import {numberWithCommas} from '../utils/validation'
 import holdingsData from '../mock/holdingsData'
 import store from '../stores/configureStore'
