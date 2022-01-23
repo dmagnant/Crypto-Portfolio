@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import store from '../stores/configureStore'
 
 class AddCoin extends React.Component {

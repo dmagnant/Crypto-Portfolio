@@ -40,12 +40,6 @@ function changeState(state = defaultState, action) {
             profiles: [action.data.profiles]
         }
     }
-    else if (action.type === 'UPDATE_HOLDINGS') {
-        return {
-            ...state,
-            profiles: [action.data.profiles]
-        }
-    }
     else if (action.type === 'UPDATE_PORTFOLIO_WORTH') {
         return {
             ...state,
