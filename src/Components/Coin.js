@@ -1,8 +1,8 @@
 import React from 'react';
 
-import holdingsData from '../mock/holdingsData'
 import UpdateHoldings from './UpdateHoldings'
 import {numberWithCommas} from '../utils/validation'
+import store from '../stores/configureStore'
 
 class Coin extends React.Component {
       render() {
@@ -12,7 +12,7 @@ class Coin extends React.Component {
         let coinHoldings = 0;
         let worth = 0;
         try {
-          coinHoldings = holdingsData.find((coin) => {
+          coinHoldings = store.getState().holdingsData.find((coin) => {
             const {name} = coin;
             return name.toLowerCase() === profile.name.toLowerCase()
         }, name).holdings;

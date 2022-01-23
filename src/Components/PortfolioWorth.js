@@ -1,15 +1,41 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import {numberWithCommas} from '../utils/validation'
-import holdingsData from '../mock/holdingsData'
 import store from '../stores/configureStore'
 
 class PortfolioWorth extends React.Component {
-    handleClick = (event) => {
-      console.log('handled');
-      this.props.onClick();
+    handleClick = () => {
+      if (store.getState().profiles) {
+        const profiles = store.getState().profiles
+        store.dispatch( {type:'CLEAR_COINS', data:{} } );
+        let updateProfiles = [...profiles]
+        profiles.forEach( async (coin, i) => {
+          await fetch(`https://api.coingecko.com/api/v3/coins/${coin.name.toLocaleLowerCase()}`)
+            .then((response) => {
+              if (response.status === 404) {
+                const err = new Error ("please enter a valid coin name (ex. bitcoin)");
+                throw err;
+              }
+              else {
+                return response.json();
+              }
+            })
+            .catch((error) => {
+              alert(error);
+            })
+            .then((data) => {
+              if (data !== undefined) {
+                updateProfiles[i].market_data.current_price.usd = data.market_data.current_price.usd;
+                store.dispatch( {type:'ADD_COIN', data:{profiles: updateProfiles[i]}} );
+            }
+          });
+        })
+    }      
     };
       render() {
       function totalPortfolio(profile) {
+        const holdingsData = store.getState().holdingsData;
           const haveCoins = holdingsData.find( (coin) => {
             const {name} = coin;
             return name.toLowerCase() === profile.name.toLowerCase()
@@ -36,4 +62,10 @@ class PortfolioWorth extends React.Component {
     }
   }
 
-export default PortfolioWorth;
+const mapStateToProps = (state) => {
+  return {
+    profiles: state.profiles,
+  }
+}
+
+export default connect(mapStateToProps) (PortfolioWorth);

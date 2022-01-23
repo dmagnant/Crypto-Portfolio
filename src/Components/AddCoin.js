@@ -1,37 +1,53 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import store from '../stores/configureStore'
 
 class AddCoin extends React.Component {
-	state = { coin: '' };
 	handleSubmit = async (event) => {
   	event.preventDefault();
-    await fetch(`https://api.coingecko.com/api/v3/coins/${this.state.coin.toLocaleLowerCase()}`)
-      .then((response) => {
-        if (response.status === 404) {
-          const err = new Error ("please enter a valid coin name (ex. bitcoin)");
-          throw err;
+    const coinName = store.getState().enteredCoin;
+    const profiles = store.getState().profiles
+    let found = undefined;
+    if (profiles) {
+      found = profiles.find( 
+          (coin) => coin.name.toLocaleLowerCase() === coinName.toLocaleLowerCase()
+      );
+    }
+    if (found !== undefined) {
+      alert(`${coinName} is already listed`);
+      store.dispatch( {type:'CLEAR_ENTERED_COIN', data:{}} );
+    }
+    else {
+      await fetch(`https://api.coingecko.com/api/v3/coins/${coinName.toLocaleLowerCase()}`)
+        .then((response) => {
+          if (response.status === 404) {
+            const err = new Error ("please enter a valid coin name (ex. bitcoin)");
+            throw err;
+          }
+          else {
+            return response.json();
+          }
+        })
+        .catch((error) => {
+          alert(error);
+          store.dispatch( {type:'CLEAR_ENTERED_COIN', data:{}} );
+        })
+        .then((data) => {
+          if (data !== undefined) {
+            store.dispatch( {type:'ADD_COIN', data:{profiles: data}} );
+            store.dispatch( {type:'CLEAR_ENTERED_COIN', data:{}} );
         }
-        else {
-          return response.json();
-        }
-      })
-      .catch((error) => {
-        alert(error);
-        this.setState({ coin: '' });
-      })
-      .then((data) => {
-        if (data !== undefined) {
-          this.props.onSubmit(data);
-      }
-    });
-    this.setState({ coin: '' });
-  };
+      });
+    };
+  }
 	render() {
   	return (
     	<form onSubmit={this.handleSubmit}>
     	  <input 
           type="text" 
-          value={this.state.coin}
-          onChange={event => this.setState({ coin: event.target.value})}
+          value={store.getState().enteredCoin}
+          onChange={event => store.dispatch( {type:'UPDATE_ENTERED_COIN', data:{enteredCoin: event.target.value}} )}
           placeholder="coin name" 
           required 
         />
@@ -41,4 +57,10 @@ class AddCoin extends React.Component {
   }
 }
 
-export default AddCoin;
+const mapStateToProps = (state) => {
+  return {
+    enteredCoin: state.enteredCoin,
+  }
+}
+
+export default connect(mapStateToProps) (AddCoin);
