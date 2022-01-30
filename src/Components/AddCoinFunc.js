@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import store from '../stores/configureStore'
 
-class AddCoin extends React.Component {
+function AddCoinFunc(props) {
 	handleSubmit = async (event) => {
   	event.preventDefault();
     const coinName = store.getState().enteredCoin;
@@ -40,20 +40,18 @@ class AddCoin extends React.Component {
       });
     };
   }
-	render() {
-  	return (
-    	<form onSubmit={this.handleSubmit}>
-    	  <input 
-          type="text" 
-          value={store.getState().enteredCoin}
-          onChange={event => store.dispatch( {type:'UPDATE_ENTERED_COIN', data:{enteredCoin: event.target.value}} )}
-          placeholder="coin name" 
-          required 
-        />
-        <button>Add coin</button>
-    	</form>
-    );
-  }
+  return (
+    <form onSubmit={this.handleSubmit}>
+      <input 
+        type="text" 
+        value={store.getState().enteredCoin}
+        onChange={event => store.dispatch( {type:'UPDATE_ENTERED_COIN', data:{enteredCoin: event.target.value}} )}
+        placeholder="coin name" 
+        required 
+      />
+      <button>Add coin</button>
+    </form>
+  );
 }
 const mapStateToProps = (state) => {
   return {
@@ -61,4 +59,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps) (AddCoin);
+export default connect(mapStateToProps) (AddCoinFunc);
