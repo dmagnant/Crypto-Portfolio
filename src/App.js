@@ -1,10 +1,10 @@
 import React from 'react';
 
 import './App.css';
-import PortfolioWorth from './Components/PortfolioWorth'
-import CoinList from './Components/CoinList'
-import AddCoin from './Components/AddCoin'
-import AddCoinFunc from './Components/AddCoinFunc'
+import PortfolioWorth from './components/PortfolioWorth'
+import CoinList from './components/CoinList'
+import AddCoin from './components/AddCoin'
+import AddCoinFunc from './components/AddCoinFunc'
 
 
 class App extends React.Component {
