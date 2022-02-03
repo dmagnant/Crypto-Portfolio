@@ -25,6 +25,9 @@ Redux State Management
 
 TO DOs:
 Make the "update holdings" feature active
+
 Change from class components to functional ones
+
 Give Historical Worth View
+
 Stylize the App through Semantic UI
