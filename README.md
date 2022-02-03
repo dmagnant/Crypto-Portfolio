@@ -1,6 +1,4 @@
-# CRYPTO PORTFOLIO APP
-
-## Available Scripts
+# Crypto Portfolio App
 
 In the project directory, you can run:
 
