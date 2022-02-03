@@ -23,7 +23,8 @@ User can search for coins by name and add them to their portfolio. When added, t
 
 Redux State Management
 
-TO DOs:
+TO DOs
+:
 Make the "update holdings" feature active
 
 Change from class components to functional ones
