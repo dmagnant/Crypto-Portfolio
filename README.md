@@ -23,6 +23,8 @@ User can search for coins by name and add them to their portfolio. When added, t
 
 Redux State Management
 
+API Calls to CoinGecko for coin data
+
 TO DOs
 :
 Make the "update holdings" feature active
