@@ -1,7 +1,7 @@
 import React from 'react';
 
 import UpdateHoldings from './UpdateHoldings'
-import {numberWithCommas} from '../utils/validation'
+import { numberWithCommas } from '../utils/validation'
 import store from '../stores/configureStore'
 
 class Coin extends React.Component {
