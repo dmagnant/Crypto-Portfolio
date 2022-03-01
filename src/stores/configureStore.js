@@ -1,4 +1,4 @@
-import { createStore } from 'redux'
+import { compose, createStore } from 'redux'
 
 import holdingsData from '../mock/holdingsData'
 
@@ -48,6 +48,9 @@ function changeState(state = defaultState, action) {
     }
     return state;
 }
-let store = createStore(changeState);
+
+const enhancer = compose(window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f);
+
+let store = createStore(changeState, defaultState, enhancer);
 
 export default store;

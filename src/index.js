@@ -8,11 +8,9 @@ import store from './stores/configureStore'
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App title="Crypto Portfolio"/>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <App title="Crypto Portfolio"/>
+  </Provider>,
   document.getElementById('root')
 
 );
