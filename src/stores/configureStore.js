@@ -50,7 +50,6 @@ function changeState(state = defaultState, action) {
 }
 
 const enhancer = compose(window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f);
-
 let store = createStore(changeState, defaultState, enhancer);
 
 export default store;
